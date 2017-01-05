@@ -2,6 +2,7 @@ package com.tingyun.page.impl;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 public class LoginPage {
@@ -11,7 +12,7 @@ public class LoginPage {
 	}
 	public void login(String name,String passwd){
 		System.out.println("begin login");
-		//登录页面
+		SnapshotUtil.snapshot((TakesScreenshot)driver,"open_server.png");		//登录页面
         //输入用户�?
         driver.findElement(By.id("username")).clear();
         driver.findElement(By.id("username")).sendKeys(name);
