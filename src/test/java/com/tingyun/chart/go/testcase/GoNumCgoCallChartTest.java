@@ -64,5 +64,8 @@ public class GoNumCgoCallChartTest extends TingyunChartTestCase {
 			Assert.assertEquals(rs.getDouble(1), b.getSeries().get(0).getData().get(i).getY());
 			i++;
 		}
+		if (i==0){
+			Assert.fail("数据库中未查到数据"+sql);
+		}
 	}
 }

@@ -37,7 +37,11 @@ import com.tingyun.chart.client.JsonUtil;
 import com.tingyun.chart.database.DBUtil;
 import com.tingyun.page.impl.LoginPage;
 
-public class TingyunChartTestCase  {
+public class TingyunChartTestCase {
+
+	HttpClientFactory f;
+	WebDriver driver;
+
 	public int UTC20130101MINTER = (int) ((parseTimestamp("2013-01-01 00:00:00", TimeZone.getTimeZone("GMT"))).getTime()
 			/ 60000);
 	public final static String POSTFIX_1MINTER = "";// _MIN
@@ -56,6 +60,7 @@ public class TingyunChartTestCase  {
 
 	/**
 	 * 计算绝对时间(分钟)
+	 * 
 	 * @param timeString
 	 * @return
 	 */
@@ -67,6 +72,7 @@ public class TingyunChartTestCase  {
 
 	/**
 	 * 计算结束时间 yyyy-MM-dd HH:mm
+	 * 
 	 * @param timeString
 	 * @param tmDataTick
 	 * @param relativeTimeRange
@@ -101,8 +107,10 @@ public class TingyunChartTestCase  {
 		return sdf.format(d);
 
 	}
+
 	/**
 	 * 计算相对2013-01-01 00:00 时间(分钟)
+	 * 
 	 * @param timeString
 	 * @return
 	 */
@@ -119,9 +127,10 @@ public class TingyunChartTestCase  {
 		int betweenDay = (int) (new Date().getTime() / (24 * 3600 * 1000) - end_time.getTime() / (24 * 3600 * 1000));
 		return getTablePostFix(tick, betweenDay);
 	}
-	
+
 	/**
 	 * 计算查询表后缀
+	 * 
 	 * @param tick
 	 * @param betweenDay
 	 * @return
@@ -178,9 +187,10 @@ public class TingyunChartTestCase  {
 	public String getInitSqlFile() {
 		return "./src/main/resources/" + this.getClass().getSimpleName() + ".sql";
 	}
-	
+
 	/**
 	 * 执行sql 模版语句
+	 * 
 	 * @param sql
 	 * @param endtime
 	 * @param timePeriod
@@ -193,7 +203,7 @@ public class TingyunChartTestCase  {
 		Statement stmt = conn.createStatement();
 		// 计算sql语句中的开始时间和结束时间戳以分钟为单位，以2013年为基准
 		int tmTick = getTmDataTick(timePeriod);
-		endtime= getEndtime(endtime,tmTick,timePeriod);
+		endtime = getEndtime(endtime, tmTick, timePeriod);
 		int sql_endtime = getRelativeMinTimestamp(endtime);
 		int sql_begintime = sql_endtime - timePeriod;
 		int sql_begintime_abs = sql_begintime + UTC20130101MINTER;
@@ -215,28 +225,28 @@ public class TingyunChartTestCase  {
 
 	private String currUserName;
 
-	protected ChartBean getCharBean(ChartTestInput input) {
-		CloseableHttpClient client;
-		HttpClientFactory f;
-		f = new HttpClientFactory();
-		WebDriver driver = null;
-		driver = new PhantomJSDriver();
-		// 让浏览器访问 server 报表
-		driver.get(input.getLoginUrl());
-		LoginPage loginPage = new LoginPage(driver);
-		// 判断是否需要登陆
-		loginPage.login(input.getUserName(), input.getPassword());
-
-		Set<Cookie> x = driver.manage().getCookies();
-		for (Cookie item : x) {
-			BasicClientCookie y = new BasicClientCookie(item.getName(), item.getValue());
-			y.setPath(item.getPath());
-			y.setExpiryDate(item.getExpiry());
-			y.setDomain(item.getDomain());
-			y.setAttribute(item.getName(), item.getValue());
-			f.getCookieStore().addCookie(y);
+	public ChartBean getCharBean(ChartTestInput input) {
+		if (!input.getUserName().equals(currUserName)) {
+			f = new HttpClientFactory();
+			driver = new PhantomJSDriver();
+			// 让浏览器访问 server 报表
+			driver.get(input.getLoginUrl());
+			LoginPage loginPage = new LoginPage(driver);
+			// 判断是否需要登陆
+			loginPage.login(input.getUserName(), input.getPassword());
+			Set<Cookie> x = driver.manage().getCookies();
+			for (Cookie item : x) {
+				BasicClientCookie y = new BasicClientCookie(item.getName(), item.getValue());
+				y.setPath(item.getPath());
+				y.setExpiryDate(item.getExpiry());
+				y.setDomain(item.getDomain());
+				y.setAttribute(item.getName(), item.getValue());
+				f.getCookieStore().addCookie(y);
+			}
+			currUserName = input.getUserName();
 		}
-		client = f.createSSLClientDefault();
+
+		CloseableHttpClient client = f.createSSLClientDefault();
 		// 创建httppost
 		HttpPost httppost = new HttpPost(input.getChartUrl());
 		// 创建参数队列
@@ -279,7 +289,7 @@ public class TingyunChartTestCase  {
 					e.printStackTrace();
 				}
 			}
-			driver.quit();
+			// driver.quit();
 		}
 		return null;
 	}

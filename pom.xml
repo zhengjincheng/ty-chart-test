@@ -49,9 +49,6 @@
 
 					</includes>
 					<excludes>
-						<include>**/GoGcChartTest.java</include>
-						<include>**/GoGctimeChartTest.java</include>
-						<include>**/GoNumCgoCallChartTest.java</include>
 						<include>**/GoThreadChartTest.java.</include>
 					</excludes>
 				</configuration>

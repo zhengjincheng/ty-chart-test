@@ -31,30 +31,30 @@ public class GoThreadChart2Test extends TingyunChartTestCase {
 		int timePeriod = 30;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
 	}
-//	@Test
-//	public void test_1h() throws SQLException {
-//		// 设置结束时间
-//		String endtime = "2017-01-03 13:30";
-//		// 查询时间跨度
-//		int timePeriod = 60;
-//		queryByEndtimeAndTimePeriod(endtime, timePeriod);
-//	}
-//	@Test
-//	public void test_1D() throws SQLException {
-//		// 设置结束时间
-//		String endtime = "2017-01-03 13:30";
-//		// 查询时间跨度
-//		int timePeriod = 60*24;
-//		queryByEndtimeAndTimePeriod(endtime, timePeriod);
-//	}
-//	@Test
-//	public void test_15D() throws SQLException {
-//		// 设置结束时间
-//		String endtime = "2017-01-03 13:30";
-//		// 查询时间跨度
-//		int timePeriod = 60*24*15;
-//		queryByEndtimeAndTimePeriod(endtime, timePeriod);
-//	}
+	@Test
+	public void test_1h() throws SQLException {
+		// 设置结束时间
+		String endtime = "2017-01-03 13:30";
+		// 查询时间跨度
+		int timePeriod = 60;
+		queryByEndtimeAndTimePeriod(endtime, timePeriod);
+	}
+	@Test
+	public void test_1D() throws SQLException {
+		// 设置结束时间
+		String endtime = "2017-01-03 13:30";
+		// 查询时间跨度
+		int timePeriod = 60*24;
+		queryByEndtimeAndTimePeriod(endtime, timePeriod);
+	}
+	@Test
+	public void test_15D() throws SQLException {
+		// 设置结束时间
+		String endtime = "2017-01-03 13:30";
+		// 查询时间跨度
+		int timePeriod = 60*24*15;
+		queryByEndtimeAndTimePeriod(endtime, timePeriod);
+	}
 
 	public void queryByEndtimeAndTimePeriod(String endtime, int timePeriod) throws SQLException {
 
