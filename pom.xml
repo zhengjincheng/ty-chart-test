@@ -44,7 +44,7 @@
 				<configuration>
 					<includes>
 
-						<include>**/GoThreadChart2Test.java</include>
+						<include>**/*Test.java</include>
 
 
 					</includes>
