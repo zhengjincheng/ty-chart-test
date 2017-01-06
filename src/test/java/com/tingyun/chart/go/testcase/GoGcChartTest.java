@@ -65,12 +65,17 @@ public class GoGcChartTest extends TingyunChartTestCase {
 		System.out.println(input.toString());
 		
 		// 获取sql的数据
-		String sql = "select sum(gc_time_total) as gc_time,$sql_tmTick  from NL_VM_GO_GC$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = 424 and count > 0	 group by tmTick order by tmTick asc";
+		String sql = "select  sum(count) as go_gc_count ,MAX(gc_time_max) as gc_time_max,MIN(gc_time_min) as gc_time_min,FORMAT(sum(gc_time_total)/sum(count),1) as go_gc_time,$sql_tmTick  from NL_VM_GO_GC$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = 424 and count > 0	 group by tmTick order by tmTick asc";
 		ResultSet rs = executeQuery(sql, endtime, timePeriod);
 		int i = 0;
 		while (rs.next()) {
 			// 对结果进行比较
-			Assert.assertEquals(rs.getDouble(1), b.getSeries().get(0).getData().get(i).getY());
+			//次数
+			Assert.assertEquals(String.valueOf(rs.getInt(1)), b.getSeries().get(0).getData().get(i).getY());
+			//最大值
+			Assert.assertEquals(String.valueOf(rs.getDouble(2)), b.getSeries().get(1).getData().get(i).getY());
+			//平均值
+			Assert.assertEquals(String.valueOf(rs.getDouble(4)), b.getSeries().get(2).getData().get(i).getY());
 			i++;
 		}
 		//

@@ -3,6 +3,12 @@ package com.tingyun.chart.bean;
 import java.util.List;
 
 public class Series {
+
+
+	private int yaxis;
+	
+
+	private int yAxis;
 	private String name;
 
 	private String type;
@@ -86,7 +92,21 @@ public class Series {
 		return this.marker;
 
 	}
+	public int getYaxis() {
+		return yaxis;
+	}
 
+	public void setYaxis(int yaxis) {
+		this.yaxis = yaxis;
+	}
+
+	public int getyAxis() {
+		return yAxis;
+	}
+
+	public void setyAxis(int yAxis) {
+		this.yAxis = yAxis;
+	}
 	@Override
 	public String toString() {
 		return "Series [name=" + name + ", type=" + type + ", color=" + color + ", data=" + data + ", params=" + params

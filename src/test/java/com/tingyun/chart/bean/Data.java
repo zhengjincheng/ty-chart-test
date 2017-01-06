@@ -5,7 +5,7 @@ public class Data {
 	private String name;
 	private long x;
 
-	private double y;
+	private String y;
 
 	private String tooltip;
 	public String getName() {
@@ -27,13 +27,13 @@ public class Data {
 
 	}
 
-	public void setY(double y) {
+	public void setY(String y) {
 
 		this.y = y;
 
 	}
 
-	public double getY() {
+	public String getY() {
 
 		return this.y;
 
