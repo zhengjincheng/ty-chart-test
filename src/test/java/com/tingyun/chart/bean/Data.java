@@ -1,5 +1,12 @@
 package com.tingyun.chart.bean;
 
+import java.io.IOException;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+
+import com.tingyun.chart.client.JsonUtil;
+
 public class Data {
 
 	private String name;
@@ -8,6 +15,9 @@ public class Data {
 	private String y;
 
 	private String tooltip;
+	
+	
+	
 	public String getName() {
 		return name;
 	}
@@ -50,6 +60,20 @@ public class Data {
 		return this.tooltip;
 
 	}
+	public Tooltip getTooltipObject() {
+
+		try {
+			return JsonUtil.get(this.tooltip,Tooltip.class);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 
 	@Override
 	public String toString() {

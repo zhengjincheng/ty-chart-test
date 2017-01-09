@@ -14,14 +14,7 @@ import junit.framework.Assert;
 public class GoGcChartTest extends TingyunChartTestCase {
 	private String endtime = "2017-01-03 13:30";
 
-	public void test30min() {
-//		ChartTestInput input = ChartTestInput.build().userName("sina").passWord("1").chartid("go-gc")
-//				.put("applicationId", "127118").put("vm_id", "422").put("timePeriod", "30").put("timeType", "1");
-//		ChartBean b = getCharBean(input);
-//		Assert.assertEquals(1, b.getSeries().get(0).getData().size());//第一个性能指标，数据的个数
-//		Assert.assertEquals(3, b.getSeries().size());//几个性能指标
-//		Assert.assertEquals(1, b.getSeries().get(3).getData().get(0).getY());//第一个性能指标的 第一个数据
-	}
+	
 	@Test
 	public void test_30min() throws SQLException {
 		// 设置结束时间

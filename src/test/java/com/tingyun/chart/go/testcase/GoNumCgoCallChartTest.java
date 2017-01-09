@@ -13,10 +13,12 @@ import junit.framework.Assert;
 
 public class GoNumCgoCallChartTest extends TingyunChartTestCase {
 
+	private String endtime = "2017-01-03 13:30";
+
 	@Test
 	public void test_30min() throws SQLException {
 		// 设置结束时间
-		String endtime = "2017-01-03 13:30";
+		String endtime = this.endtime;
 		// 查询时间跨度
 		int timePeriod = 30;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
@@ -24,7 +26,7 @@ public class GoNumCgoCallChartTest extends TingyunChartTestCase {
 	@Test
 	public void test_1h() throws SQLException {
 		// 设置结束时间
-		String endtime = "2017-01-03 13:30";
+		String endtime = this.endtime;
 		// 查询时间跨度
 		int timePeriod = 60;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
@@ -32,7 +34,7 @@ public class GoNumCgoCallChartTest extends TingyunChartTestCase {
 	@Test
 	public void test_1D() throws SQLException {
 		// 设置结束时间
-		String endtime = "2017-01-03 13:30";
+		String endtime = this.endtime;
 		// 查询时间跨度
 		int timePeriod = 60*24;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
@@ -40,7 +42,7 @@ public class GoNumCgoCallChartTest extends TingyunChartTestCase {
 	@Test
 	public void test_15D() throws SQLException {
 		// 设置结束时间
-		String endtime = "2017-01-03 13:30";
+		String endtime = this.endtime;
 		// 查询时间跨度
 		int timePeriod = 60*24*15;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
@@ -61,7 +63,7 @@ public class GoNumCgoCallChartTest extends TingyunChartTestCase {
 		int i = 0;
 		while (rs.next()) {
 			// 对结果进行比较
-			Assert.assertEquals(rs.getDouble(1), b.getSeries().get(0).getData().get(i).getY());
+			Assert.assertEquals(String.valueOf(rs.getInt(1)), b.getSeries().get(0).getData().get(i).getY());
 			i++;
 		}
 		if (i==0){

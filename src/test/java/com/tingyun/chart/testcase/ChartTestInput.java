@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChartTestInput {
-	//private final static String contextUrl="http://reportlocal.tingyun.com/server";
+//	private final static String contextUrl="https://reportalpha1.tingyun.com/server/";
 	private final static String contextUrl="http://www.ty.com/server";
 
 	private String userName;

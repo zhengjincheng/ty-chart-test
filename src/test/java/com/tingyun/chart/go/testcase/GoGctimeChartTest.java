@@ -82,7 +82,7 @@ public class GoGctimeChartTest extends TingyunChartTestCase {
 		int i = 0;
 		while (rs.next()) {
 			// 对结果进行比较
-			Assert.assertEquals(rs.getDouble(1), b.getSeries().get(0).getData().get(i).getY());
+			Assert.assertEquals(String.valueOf(rs.getDouble(1)), b.getSeries().get(0).getData().get(i).getY());
 			i++;
 		}
 		//

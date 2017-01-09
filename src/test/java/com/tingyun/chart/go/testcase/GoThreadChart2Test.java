@@ -18,6 +18,7 @@ import junit.framework.Assert;
  *
  */
 public class GoThreadChart2Test extends TingyunChartTestCase {
+	private String endtime = "2017-01-03 13:30";
 
 	/**
 	 * 
@@ -26,7 +27,7 @@ public class GoThreadChart2Test extends TingyunChartTestCase {
 	@Test
 	public void test_30min() throws SQLException {
 		// 设置结束时间
-		String endtime = "2017-01-03 13:30";
+		String endtime = this.endtime;
 		// 查询时间跨度
 		int timePeriod = 30;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
@@ -34,7 +35,7 @@ public class GoThreadChart2Test extends TingyunChartTestCase {
 	@Test
 	public void test_1h() throws SQLException {
 		// 设置结束时间
-		String endtime = "2017-01-03 13:30";
+		String endtime = this.endtime;
 		// 查询时间跨度
 		int timePeriod = 60;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
@@ -42,7 +43,7 @@ public class GoThreadChart2Test extends TingyunChartTestCase {
 	@Test
 	public void test_1D() throws SQLException {
 		// 设置结束时间
-		String endtime = "2017-01-03 13:30";
+		String endtime = this.endtime;
 		// 查询时间跨度
 		int timePeriod = 60*24;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
@@ -50,7 +51,7 @@ public class GoThreadChart2Test extends TingyunChartTestCase {
 	@Test
 	public void test_15D() throws SQLException {
 		// 设置结束时间
-		String endtime = "2017-01-03 13:30";
+		String endtime = this.endtime;
 		// 查询时间跨度
 		int timePeriod = 60*24*15;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
@@ -66,12 +67,12 @@ public class GoThreadChart2Test extends TingyunChartTestCase {
 		System.out.println(input.toString());
 
 		// 获取sql的数据
-		String sql = "select  FORMAT(sum(goroutine_total)/sum(count),1) as total_count,$sql_tmTick  from NL_VM_GO_RUNTIME$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = 424 and count > 0	 group by tmTick order by tmTick asc";
+		String sql = "select  round(sum(goroutine_total)/sum(count),1) as total_count,$sql_tmTick  from NL_VM_GO_RUNTIME$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = 424 and count > 0	 group by tmTick order by tmTick asc";
 		ResultSet rs = executeQuery(sql, endtime, timePeriod);
 		int i = 0;
 		while (rs.next()) {
 			// 对结果进行比较
-			Assert.assertEquals(rs.getDouble(1), b.getSeries().get(0).getData().get(i).getY());
+			Assert.assertEquals(String.valueOf(rs.getDouble(1)), b.getSeries().get(0).getData().get(i).getY());
 			i++;
 		}
 		if (i==0){

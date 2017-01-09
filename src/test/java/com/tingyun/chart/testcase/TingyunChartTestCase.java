@@ -1,6 +1,5 @@
 package com.tingyun.chart.testcase;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,39 +7,18 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-
 import com.tingyun.chart.bean.ChartBean;
-import com.tingyun.chart.client.HttpClientFactory;
-import com.tingyun.chart.client.JsonUtil;
+import com.tingyun.chart.client.HttpUtil;
 import com.tingyun.chart.database.DBUtil;
-import com.tingyun.page.impl.LoginPage;
 
 public class TingyunChartTestCase {
 
-	HttpClientFactory f;
-	WebDriver driver;
+//	HttpClientFactory f;
+//	WebDriver driver;
 
 	public int UTC20130101MINTER = (int) ((parseTimestamp("2013-01-01 00:00:00", TimeZone.getTimeZone("GMT"))).getTime()
 			/ 60000);
@@ -212,6 +190,7 @@ public class TingyunChartTestCase {
 		String table_postfix = getTablePostFix(tmTick, endtime);
 		String sql_tmTick = "FROM_UNIXTIME((" + sql_begintime_abs + " +floor(floor((timestamp-" + sql_begintime + ")/"
 				+ tmTick + "))*" + tmTick + ")*60) as tmTick";
+		sql = sql.replace("$tmTick", String.valueOf(tmTick));
 		sql = sql.replace("$sql_tmTick", sql_tmTick);
 		sql = sql.replace("$sql_begintime", String.valueOf(sql_begintime));
 		sql = sql.replace("$sql_endtime", String.valueOf(sql_endtime));
@@ -226,72 +205,7 @@ public class TingyunChartTestCase {
 	private String currUserName;
 
 	public ChartBean getCharBean(ChartTestInput input) {
-		if (!input.getUserName().equals(currUserName)) {
-			f = new HttpClientFactory();
-			driver = new PhantomJSDriver();
-			// 让浏览器访问 server 报表
-			driver.get(input.getLoginUrl());
-			LoginPage loginPage = new LoginPage(driver);
-			// 判断是否需要登陆
-			loginPage.login(input.getUserName(), input.getPassword());
-			Set<Cookie> x = driver.manage().getCookies();
-			for (Cookie item : x) {
-				BasicClientCookie y = new BasicClientCookie(item.getName(), item.getValue());
-				y.setPath(item.getPath());
-				y.setExpiryDate(item.getExpiry());
-				y.setDomain(item.getDomain());
-				y.setAttribute(item.getName(), item.getValue());
-				f.getCookieStore().addCookie(y);
-			}
-			currUserName = input.getUserName();
-		}
-
-		CloseableHttpClient client = f.createSSLClientDefault();
-		// 创建httppost
-		HttpPost httppost = new HttpPost(input.getChartUrl());
-		// 创建参数队列
-		List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-		Iterator<Entry<String, String>> iter = input.getParams().entrySet().iterator();
-		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry) iter.next();
-			formparams.add(new BasicNameValuePair((String) entry.getKey(), (String) entry.getValue()));
-		}
-
-		UrlEncodedFormEntity uefEntity;
-		CloseableHttpResponse response = null;
-		try {
-			uefEntity = new UrlEncodedFormEntity(formparams, "UTF-8");
-			httppost.setEntity(uefEntity);
-
-			response = client.execute(httppost);
-			System.out.println("=======result==begin====");
-
-			System.out.println("executing request " + httppost.getURI());
-
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-				System.out.println("StatusCode=" + response.getStatusLine().getStatusCode());
-				String content = EntityUtils.toString(entity, "ISO-8859-1");
-				System.out.println(content);
-				ChartBean b = JsonUtil.get(content, ChartBean.class);
-				System.out.println(b);
-				return b;
-			}
-		} catch (Exception e) {
-			System.out.println("--getCharBean--" + e.getMessage());
-		} finally {
-			System.out.println("=======result===end=====");
-			// 关闭连接,释放资源
-			if (response != null) {
-				try {
-					response.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			// driver.quit();
-		}
-		return null;
+		return HttpUtil.getInstance().getCharBean(input);
 	}
 
 }

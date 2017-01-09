@@ -21,7 +21,7 @@ public class DBUtil {
 	private String userName = "root";
 	private String password = "root";
 */
-	private String url = "jdbc:mysql://192.168.2.19:3306/lens_server_data?useUnicode=true&amp;characterEncoding=utf8";
+	private String url = "jdbc:mysql://192.168.2.17:8066/lens_server_data?useUnicode=true&amp;characterEncoding=utf8";
 	private String driver = "com.mysql.jdbc.Driver";
 	private String userName = "lens";
 	private String password = "nbs2010";

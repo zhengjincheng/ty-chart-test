@@ -29,6 +29,9 @@ public class HttpClientFactory {
 	}
 
 
+	public void setCookieStore(BasicCookieStore cookieStore) {
+		this.cookieStore = cookieStore;
+	}
 	public SSLContext trustAllHttpsCertificates() {
 		TrustManager[] trustAllCerts = new TrustManager[1];
 		TrustManager tm = new miTM();
