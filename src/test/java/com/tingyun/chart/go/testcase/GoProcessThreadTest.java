@@ -12,8 +12,8 @@ import com.tingyun.chart.testcase.TingyunChartTestCase;
 import junit.framework.Assert;
 
 public class GoProcessThreadTest extends TingyunChartTestCase {
-	private String endtime = "2016-12-30 08:51";
-//	private String endtime = GoTestConst.endtime;
+//	private String endtime = "2016-12-30 08:51";
+	private String endtime = GoTestConst.endtime;
 
 	private String applicationId = GoTestConst.applicationId;
 	private String vm_id = GoTestConst.vm_id;
