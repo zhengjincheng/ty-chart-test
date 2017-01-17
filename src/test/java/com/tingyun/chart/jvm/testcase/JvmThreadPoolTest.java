@@ -65,7 +65,8 @@ public class JvmThreadPoolTest extends TingyunChartTestCase {
 		sql = sql.replace("$thread_pool_id", thread_pool_id);
 
 		
-		ResultSet rs = executeQuery(sql, endtime, timePeriod);
+		sql=createQuery(sql, endtime, timePeriod);
+		ResultSet rs = executeQuery(sql);
 		int i = 0;
 		while (rs.next()) {
 			Assert.assertEquals(String.valueOf(rs.getInt(1)), b.getSeries().get(0).getData().get(i).getY());

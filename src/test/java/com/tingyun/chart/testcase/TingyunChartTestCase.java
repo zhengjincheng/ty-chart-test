@@ -15,6 +15,8 @@ import com.tingyun.chart.bean.ChartBean;
 import com.tingyun.chart.client.HttpUtil;
 import com.tingyun.chart.database.DBUtil;
 
+
+
 public class TingyunChartTestCase {
 
 //	HttpClientFactory f;
@@ -196,12 +198,39 @@ public class TingyunChartTestCase {
 		sql = sql.replace("$sql_endtime", String.valueOf(sql_endtime));
 		sql = sql.replace("$table_postfix", table_postfix);
 		ResultSet rs = stmt.executeQuery(sql);
-		System.out.println("sql=  " + sql);
-
+		System.out.println("sql=  " + sql);		
 		return rs;
 
 	}
+	public String createQuery(String sql, String endtime, int timePeriod) throws SQLException {
 
+		// 计算sql语句中的开始时间和结束时间戳以分钟为单位，以2013年为基准
+		int tmTick = getTmDataTick(timePeriod);
+		endtime = getEndtime(endtime, tmTick, timePeriod);
+		int sql_endtime = getRelativeMinTimestamp(endtime);
+		int sql_begintime = sql_endtime - timePeriod;
+		int sql_begintime_abs = sql_begintime + UTC20130101MINTER;
+		// 计算查询时间粒度
+		// 计算表后缀
+		String table_postfix = getTablePostFix(tmTick, endtime);
+		String sql_tmTick = "FROM_UNIXTIME((" + sql_begintime_abs + " +floor(floor((timestamp-" + sql_begintime + ")/"
+				+ tmTick + "))*" + tmTick + ")*60) as tmTick";
+		sql = sql.replace("$tmTick", String.valueOf(tmTick));
+		sql = sql.replace("$sql_tmTick", sql_tmTick);
+		sql = sql.replace("$sql_begintime", String.valueOf(sql_begintime));
+		sql = sql.replace("$sql_endtime", String.valueOf(sql_endtime));
+		sql = sql.replace("$table_postfix", table_postfix);	
+		return sql;
+
+	}
+	public ResultSet executeQuery(String sql) throws SQLException{
+		DBUtil u = new DBUtil();
+		Connection conn = u.getConnection();
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		return rs;
+
+	}
 
 	public ChartBean getCharBean(ChartTestInput input) {
 		return HttpUtil.getInstance().getCharBean(input);

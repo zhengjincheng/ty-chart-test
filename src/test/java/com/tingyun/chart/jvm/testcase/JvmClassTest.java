@@ -63,7 +63,8 @@ public class JvmClassTest extends TingyunChartTestCase {
 		String sql = "select   sum(loaded_classes_total)/sum(count) as class_loaded,max(loaded_classes_max) as class_loaded_max,min(loaded_classes_min) as class_loaded_min,sum(unloaded_classes_total)/sum(count) as class_unloaded,max(unloaded_classes_max) as class_unloaded_max,min(unloaded_classes_min) as class_unloaded_min,$sql_tmTick  from NL_VM_CLASS_LOADING$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id  and count > 0	 group by tmTick order by tmTick asc";
 		sql = sql.replace("$vm_id", vm_id);
 
-		ResultSet rs = executeQuery(sql, endtime, timePeriod);
+		sql=createQuery(sql, endtime, timePeriod);
+		ResultSet rs = executeQuery(sql);
 		int i = 0;
 		while (rs.next()) {
 			// todo

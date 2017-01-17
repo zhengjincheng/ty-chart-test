@@ -66,8 +66,8 @@ public class ApplicationJvmHeapTest extends TingyunChartTestCase {
 		// 获取sql的数据
 		String sql = "select round(round(sum(heap_used_total)/sum(count),4),3) as heap_used_total,MAX(heap_used_max) as heap_used_total_max,MIN(heap_used_min) as heap_used_total_min,round(round(sum(heap_max_total)/sum(count),4),3) as heap_max_total,MAX(heap_max_max) as heap_max_total_max,MIN(heap_max_min) as heap_max_total_min,round(round(sum(heap_committed_total)/sum(count),4),3) as heap_committed_total,MAX(heap_committed_max) as heap_committed_total_max,MIN(heap_committed_min) as heap_committed_total_min,$sql_tmTick  from NL_VM_MEMORY$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id  and count > 0	 group by tmTick order by tmTick asc";
 		sql = sql.replace("$vm_id", vm_id);
-		
-		ResultSet rs = executeQuery(sql, endtime, timePeriod);
+		sql=createQuery(sql, endtime, timePeriod);
+		ResultSet rs = executeQuery(sql);
 		int i = 0;
 		while (rs.next()) {
 			// todo

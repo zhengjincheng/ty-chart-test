@@ -62,7 +62,9 @@ public class JvmGcTest extends TingyunChartTestCase {
 		String sql = "select  round(round(sum(gc_time_total)/sum(gc_count_total),4),3) as gc_time,max(gc_time_max) as gc_time_max,min(gc_time_min) as gc_time_min,sum(gc_count_total) as gc_count,$sql_tmTick,garbage_collector_id as garbage_collector_id  from NL_VM_GC$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id  and count > 0	 group by tmTick,garbage_collector_id order by tmTick asc";
 		sql = sql.replace("$vm_id", vm_id);
 
-		ResultSet rs = executeQuery(sql, endtime, timePeriod);
+		sql=createQuery(sql, endtime, timePeriod);
+		ResultSet rs = executeQuery(sql);
+		
 		int i = 0;
 		while (rs.next()) {
 			// todo

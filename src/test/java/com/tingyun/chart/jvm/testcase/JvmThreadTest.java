@@ -29,7 +29,8 @@ public class JvmThreadTest extends TingyunChartTestCase {
 		String sql = "select floor(sum(threads_total)/sum(count)) as thread_count,MAX(threads_max) as thread_count_max,MIN(threads_min) as thread_count_min,$sql_tmTick  from NL_VM_THREADS$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id  and count > 0	 group by tmTick order by tmTick asc";
 		sql = sql.replace("$vm_id", vm_id);
 
-		ResultSet rs = executeQuery(sql, endtime, timePeriod);
+		sql=createQuery(sql, endtime, timePeriod);
+		ResultSet rs = executeQuery(sql);
 		int i = 0;
 		while (rs.next()) {
 			Assert.assertEquals("线程数", b.getSeries().get(0).getName());

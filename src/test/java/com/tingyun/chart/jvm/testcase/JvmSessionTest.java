@@ -32,8 +32,9 @@ public class JvmSessionTest extends TingyunChartTestCase {
 		sql = sql.replace("$vm_id", vm_id);
 		sql = sql.replace("$context_path_id", context_path_id);
 
-		ResultSet rs = executeQuery(sql, endtime, timePeriod);
-		
+		sql=createQuery(sql, endtime, timePeriod);
+		ResultSet rs = executeQuery(sql);
+				
 		int i = 0;
 		while (rs.next()) {
 			Assert.assertEquals("活跃会话数", b.getSeries().get(0).getName());
