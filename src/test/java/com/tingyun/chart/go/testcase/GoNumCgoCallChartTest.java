@@ -13,8 +13,9 @@ import junit.framework.Assert;
 
 public class GoNumCgoCallChartTest extends TingyunChartTestCase {
 
-	private String endtime = "2017-01-03 13:30";
-
+	private String endtime = GoTestConst.endtime;
+	private String applicationId = GoTestConst.applicationId;
+	private String vm_id = GoTestConst.vm_id;
 	@Test
 	public void test_30min() throws SQLException {
 		// 设置结束时间
@@ -51,15 +52,17 @@ public class GoNumCgoCallChartTest extends TingyunChartTestCase {
 	public void queryByEndtimeAndTimePeriod(String endtime, int timePeriod) throws SQLException {
 
 		ChartTestInput input = ChartTestInput.build().userName("sina").passWord("1").chartid("go-num-cgo-call")
-				.put("applicationId", "127050").put("vm_id", "424").put("timePeriod", String.valueOf(timePeriod))
+				.put("applicationId", applicationId).put("vm_id", vm_id).put("timePeriod", String.valueOf(timePeriod))
 				.put("timeType", "2").put("endTime", endtime);
 		// 获得接口数据
 		ChartBean b = getCharBean(input);
 		System.out.println(input.toString());
 
 		// 获取sql的数据
-		String sql = "select sum(cgo_call_total) as cgo_call_total,$sql_tmTick  from NL_VM_GO_RUNTIME$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = 424 and count > 0	 group by tmTick order by tmTick asc";
-		ResultSet rs = executeQuery(sql, endtime, timePeriod);
+		String sql = "select sum(cgo_call_total) as cgo_call_total,$sql_tmTick  from NL_VM_GO_RUNTIME$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id and count > 0	 group by tmTick order by tmTick asc";
+		sql = sql.replace("$vm_id", vm_id);
+		sql=createQuery(sql, endtime, timePeriod);
+		ResultSet rs = executeQuery(sql);		
 		int i = 0;
 		while (rs.next()) {
 			// 对结果进行比较
