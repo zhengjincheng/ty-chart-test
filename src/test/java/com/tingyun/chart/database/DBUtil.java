@@ -21,10 +21,10 @@ public class DBUtil {
 	private String userName = "root";
 	private String password = "root";
 */
-	private String url = "jdbc:mysql://192.168.2.17:8066/lens_server_data?useUnicode=true&amp;characterEncoding=utf8";
+	private String url = "jdbc:mysql://10.194.1.2:40000/lens_server_data?useUnicode=true&amp;characterEncoding=utf8";
 	private String driver = "com.mysql.jdbc.Driver";
 	private String userName = "lens";
-	private String password = "nbs2010";
+	private String password = "nEtop2o10";
 	/*
 	 * 读取sql文件,获取sql语句 返回所有sql语句的list集合
 	 */

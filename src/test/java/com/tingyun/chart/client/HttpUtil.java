@@ -123,7 +123,7 @@ public class HttpUtil {
 	}
 
 	public void saveCookie(String userName, BasicCookieStore cookie) {
-		File file = new File(userName + ".cookie");
+		File file = new File("./target/"+userName + ".cookie");
 		ObjectOutputStream oout;
 		try {
 			oout = new ObjectOutputStream(new FileOutputStream(file));
@@ -139,7 +139,7 @@ public class HttpUtil {
 	}
 
 	public BasicCookieStore restoreCookie(String userName) {
-		File file = new File(userName + ".cookie");
+		File file = new File("./target/"+userName + ".cookie");
 
 		BasicCookieStore cookie=null;
 		ObjectInputStream oin;

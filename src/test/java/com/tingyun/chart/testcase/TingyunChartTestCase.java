@@ -202,10 +202,14 @@ public class TingyunChartTestCase {
 
 	}
 
-	private String currUserName;
 
 	public ChartBean getCharBean(ChartTestInput input) {
 		return HttpUtil.getInstance().getCharBean(input);
 	}
 
+	public String format(Date date){
+		String format2 = "yyyy-MM-dd HH:mm:ss";
+		SimpleDateFormat sdf = new SimpleDateFormat(format2);
+		return sdf.format(date);
+	}
 }

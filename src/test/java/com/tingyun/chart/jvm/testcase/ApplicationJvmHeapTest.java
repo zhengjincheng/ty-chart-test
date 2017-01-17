@@ -1,9 +1,7 @@
-package com.tingyun.chart.go.testcase;
+package com.tingyun.chart.jvm.testcase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.junit.Test;
 
@@ -12,20 +10,17 @@ import com.tingyun.chart.testcase.ChartTestInput;
 import com.tingyun.chart.testcase.TingyunChartTestCase;
 
 import junit.framework.Assert;
-
 /**
- * 根据指定时间
- * 
+ * Heap memory Usage(MB)
  * @author Administrator
  *
  */
-public class GoThreadChart2Test extends TingyunChartTestCase {
-	private String endtime = "2017-01-03 13:30";
+public class ApplicationJvmHeapTest extends TingyunChartTestCase {
 
-	/**
-	 * 
-	 * @throws SQLException
-	 */
+	private String endtime = JvmTestConst.endtime;
+	private String applicationId=JvmTestConst.applicationId;
+	private String vm_id=JvmTestConst.vm_id;
+
 	@Test
 	public void test_30min() throws SQLException {
 		// 设置结束时间
@@ -61,26 +56,29 @@ public class GoThreadChart2Test extends TingyunChartTestCase {
 
 	public void queryByEndtimeAndTimePeriod(String endtime, int timePeriod) throws SQLException {
 
-		ChartTestInput input = ChartTestInput.build().userName("sina").passWord("1").chartid("go-thread")
-				.put("applicationId", "127050").put("vm_id", "424").put("timePeriod", String.valueOf(timePeriod))
+		ChartTestInput input = ChartTestInput.build().userName("sina").passWord("1").chartid("application-jvm-heap")
+				.put("applicationId", applicationId).put("vm_id", vm_id).put("timePeriod", String.valueOf(timePeriod))
 				.put("timeType", "2").put("endTime", endtime);
 		// 获得接口数据
 		ChartBean b = getCharBean(input);
 		System.out.println(input.toString());
 
 		// 获取sql的数据
-		String sql = "select  round(sum(goroutine_total)/sum(count),1) as total_count,$sql_tmTick  from NL_VM_GO_RUNTIME$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = 424 and count > 0	 group by tmTick order by tmTick asc";
+		String sql = "select round(round(sum(heap_used_total)/sum(count),4),3) as heap_used_total,MAX(heap_used_max) as heap_used_total_max,MIN(heap_used_min) as heap_used_total_min,round(round(sum(heap_max_total)/sum(count),4),3) as heap_max_total,MAX(heap_max_max) as heap_max_total_max,MIN(heap_max_min) as heap_max_total_min,round(round(sum(heap_committed_total)/sum(count),4),3) as heap_committed_total,MAX(heap_committed_max) as heap_committed_total_max,MIN(heap_committed_min) as heap_committed_total_min,$sql_tmTick  from NL_VM_MEMORY$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id  and count > 0	 group by tmTick order by tmTick asc";
+		sql = sql.replace("$vm_id", vm_id);
+		
 		ResultSet rs = executeQuery(sql, endtime, timePeriod);
 		int i = 0;
 		while (rs.next()) {
-			// 对结果进行比较
-			Assert.assertEquals(String.valueOf(rs.getDouble(1)), b.getSeries().get(0).getData().get(i).getY());
-			Assert.assertEquals(rs.getString(2).substring(0, 19), format(new Date(b.getSeries().get(0).getData().get(i).getX())));
+			// todo
+			Assert.assertEquals(String.valueOf(rs.getFloat(1)), b.getSeries().get(0).getData().get(i).getY());
+			Assert.assertEquals(String.valueOf(rs.getFloat(4)), b.getSeries().get(1).getData().get(i).getY());
+			Assert.assertEquals(String.valueOf(rs.getFloat(7)), b.getSeries().get(2).getData().get(i).getY());
+
 			i++;
 		}
 		if (i==0){
 			Assert.fail("数据库中未查到数据"+sql);
 		}
 	}
-
 }

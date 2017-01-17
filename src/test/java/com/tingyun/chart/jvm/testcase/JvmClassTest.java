@@ -1,9 +1,7 @@
-package com.tingyun.chart.go.testcase;
+package com.tingyun.chart.jvm.testcase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.junit.Test;
 
@@ -13,19 +11,12 @@ import com.tingyun.chart.testcase.TingyunChartTestCase;
 
 import junit.framework.Assert;
 
-/**
- * 根据指定时间
- * 
- * @author Administrator
- *
- */
-public class GoThreadChart2Test extends TingyunChartTestCase {
-	private String endtime = "2017-01-03 13:30";
+public class JvmClassTest extends TingyunChartTestCase {
 
-	/**
-	 * 
-	 * @throws SQLException
-	 */
+	private String endtime = JvmTestConst.endtime;
+	private String applicationId=JvmTestConst.applicationId;
+	private String vm_id=JvmTestConst.vm_id;
+
 	@Test
 	public void test_30min() throws SQLException {
 		// 设置结束时间
@@ -61,26 +52,28 @@ public class GoThreadChart2Test extends TingyunChartTestCase {
 
 	public void queryByEndtimeAndTimePeriod(String endtime, int timePeriod) throws SQLException {
 
-		ChartTestInput input = ChartTestInput.build().userName("sina").passWord("1").chartid("go-thread")
-				.put("applicationId", "127050").put("vm_id", "424").put("timePeriod", String.valueOf(timePeriod))
+		ChartTestInput input = ChartTestInput.build().userName("sina").passWord("1").chartid("jvm-class")
+				.put("applicationId", applicationId).put("vm_id", vm_id).put("timePeriod", String.valueOf(timePeriod))
 				.put("timeType", "2").put("endTime", endtime);
 		// 获得接口数据
 		ChartBean b = getCharBean(input);
 		System.out.println(input.toString());
 
 		// 获取sql的数据
-		String sql = "select  round(sum(goroutine_total)/sum(count),1) as total_count,$sql_tmTick  from NL_VM_GO_RUNTIME$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = 424 and count > 0	 group by tmTick order by tmTick asc";
+		String sql = "select   sum(loaded_classes_total)/sum(count) as class_loaded,max(loaded_classes_max) as class_loaded_max,min(loaded_classes_min) as class_loaded_min,sum(unloaded_classes_total)/sum(count) as class_unloaded,max(unloaded_classes_max) as class_unloaded_max,min(unloaded_classes_min) as class_unloaded_min,$sql_tmTick  from NL_VM_CLASS_LOADING$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id  and count > 0	 group by tmTick order by tmTick asc";
+		sql = sql.replace("$vm_id", vm_id);
+
 		ResultSet rs = executeQuery(sql, endtime, timePeriod);
 		int i = 0;
 		while (rs.next()) {
-			// 对结果进行比较
-			Assert.assertEquals(String.valueOf(rs.getDouble(1)), b.getSeries().get(0).getData().get(i).getY());
-			Assert.assertEquals(rs.getString(2).substring(0, 19), format(new Date(b.getSeries().get(0).getData().get(i).getX())));
+			// todo
+			Assert.assertEquals(String.valueOf(rs.getInt(1)), b.getSeries().get(0).getData().get(i).getY());
+			Assert.assertEquals(String.valueOf(rs.getInt(4)), b.getSeries().get(1).getData().get(i).getY());
+
 			i++;
 		}
 		if (i==0){
 			Assert.fail("数据库中未查到数据"+sql);
 		}
 	}
-
 }

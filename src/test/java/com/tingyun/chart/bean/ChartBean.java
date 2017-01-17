@@ -64,6 +64,19 @@ public class ChartBean {
 	return this.series;
 
 	}
+	public Series getSeriesByName(String name){
+		if (this.series!=null && !this.series.isEmpty() && name!=null){
+			
+			for (Series serie :  this.series){
+				if (serie.getName().equals(name)){
+					return serie;
+				}
+			}
+		}
+		
+		return null;
+
+	}
 
 	public void setAggregateBy(int aggregateBy){
 
