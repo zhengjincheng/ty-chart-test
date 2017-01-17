@@ -224,6 +224,7 @@ public class TingyunChartTestCase {
 
 	}
 	public ResultSet executeQuery(String sql) throws SQLException{
+		System.out.println("sql=  " + sql);		
 		DBUtil u = new DBUtil();
 		Connection conn = u.getConnection();
 		Statement stmt = conn.createStatement();

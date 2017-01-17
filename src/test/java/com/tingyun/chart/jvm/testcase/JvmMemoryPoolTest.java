@@ -64,7 +64,7 @@ public class JvmMemoryPoolTest extends TingyunChartTestCase {
 		System.out.println(input.toString());
 
 		// 获取sql的数据
-		String sql = "select round(round(sum(memory_used_total)/sum(count),4),3) as memory_pool_used,MAX(memory_used_max) as memory_pool_used_max,MIN(memory_used_min) as memory_pool_used_min,sum(memory_max_total)/sum(count) as memory_pool_max,MAX(memory_max_max) as memory_pool_max_max,MIN(memory_max_min) as memory_pool_max_min,sum(memory_committed_total)/sum(count) as memory_pool_committed,MAX(memory_committed_max) as memory_pool_committed_max,MIN(memory_committed_min) as memory_pool_committed_min,$sql_tmTick  from NL_VM_MEMORY_POOL$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id and memory_pool_id = 20 and count > 0	 group by tmTick order by tmTick asc";
+		String sql = "select round(round(sum(memory_used_total)/sum(count),4),3) as memory_pool_used,MAX(memory_used_max) as memory_pool_used_max,MIN(memory_used_min) as memory_pool_used_min,round(round(sum(memory_max_total)/sum(count),3),4) as memory_pool_max,MAX(memory_max_max) as memory_pool_max_max,MIN(memory_max_min) as memory_pool_max_min,round(round(sum(memory_committed_total)/sum(count),4),3) as memory_pool_committed,MAX(memory_committed_max) as memory_pool_committed_max,MIN(memory_committed_min) as memory_pool_committed_min,$sql_tmTick  from NL_VM_MEMORY_POOL$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id and memory_pool_id = 20 and count > 0	 group by tmTick order by tmTick asc";
 		sql = sql.replace("$vm_id", vm_id);
 
 		sql=createQuery(sql, endtime, timePeriod);

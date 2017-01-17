@@ -16,7 +16,7 @@ public class JvmThreadPoolTest extends TingyunChartTestCase {
 	private String endtime = JvmTestConst.endtime;
 	private String applicationId=JvmTestConst.applicationId;
 	private String vm_id=JvmTestConst.vm_id;
-	private String thread_pool_id="842";
+	private String thread_pool_id=JvmTestConst.thread_pool_id;
 	@Test
 	public void test_30min() throws SQLException {
 		// 设置结束时间
@@ -63,8 +63,6 @@ public class JvmThreadPoolTest extends TingyunChartTestCase {
 		String sql = "select  sum(threads_busy_total)/sum(count) as thread_pool_active,MAX(threads_busy_max) as thread_pool_active_max,MIN(threads_busy_min) as thread_pool_active_min,(sum(threads_total) - sum(threads_busy_total))/sum(count) as thread_pool_idle,MAX(convert(threads_total,signed) - convert(threads_busy_max,signed)) as thread_pool_idle_max,MIN(convert(threads_total,signed) - convert(threads_busy_min,signed)) as thread_pool_idle_min,$sql_tmTick  from NL_VM_THREAD_POOL$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id and thread_pool_id = $thread_pool_id and count > 0	 group by tmTick order by tmTick asc";
 		sql = sql.replace("$vm_id", vm_id);
 		sql = sql.replace("$thread_pool_id", thread_pool_id);
-
-		
 		sql=createQuery(sql, endtime, timePeriod);
 		ResultSet rs = executeQuery(sql);
 		int i = 0;
