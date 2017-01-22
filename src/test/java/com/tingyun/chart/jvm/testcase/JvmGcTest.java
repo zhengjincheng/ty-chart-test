@@ -14,8 +14,9 @@ import junit.framework.Assert;
 public class JvmGcTest extends TingyunChartTestCase {
 
 	private String endtime = JvmTestConst.endtime;
-	private String applicationId=JvmTestConst.applicationId;
-	private String vm_id=JvmTestConst.vm_id;
+	private String applicationId = JvmTestConst.applicationId;
+	private String vm_id = JvmTestConst.vm_id;
+
 	@Test
 	public void test_30min() throws SQLException {
 		// 设置结束时间
@@ -24,6 +25,7 @@ public class JvmGcTest extends TingyunChartTestCase {
 		int timePeriod = 30;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
 	}
+
 	@Test
 	public void test_1h() throws SQLException {
 		// 设置结束时间
@@ -32,20 +34,22 @@ public class JvmGcTest extends TingyunChartTestCase {
 		int timePeriod = 60;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
 	}
+
 	@Test
 	public void test_1D() throws SQLException {
 		// 设置结束时间
 		String endtime = this.endtime;
 		// 查询时间跨度
-		int timePeriod = 60*24;
+		int timePeriod = 60 * 24;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
 	}
+
 	@Test
 	public void test_15D() throws SQLException {
 		// 设置结束时间
 		String endtime = this.endtime;
 		// 查询时间跨度
-		int timePeriod = 60*24*15;
+		int timePeriod = 60 * 24 * 15;
 		queryByEndtimeAndTimePeriod(endtime, timePeriod);
 	}
 
@@ -62,18 +66,23 @@ public class JvmGcTest extends TingyunChartTestCase {
 		String sql = "select  round(round(sum(gc_time_total)/sum(gc_count_total),4),3) as gc_time,max(gc_time_max) as gc_time_max,min(gc_time_min) as gc_time_min,sum(gc_count_total) as gc_count,$sql_tmTick,garbage_collector_id as garbage_collector_id  from NL_VM_GC$table_postfix	 where  timestamp >= $sql_begintime AND timestamp < $sql_endtime and vm_id = $vm_id  and count > 0	 group by tmTick,garbage_collector_id order by tmTick asc";
 		sql = sql.replace("$vm_id", vm_id);
 
-		sql=createQuery(sql, endtime, timePeriod);
+		sql = createQuery(sql, endtime, timePeriod);
 		ResultSet rs = executeQuery(sql);
-		
-		int i = 0;
-		while (rs.next()) {
-			// todo
-			Assert.assertEquals(String.valueOf(rs.getDouble(1)), b.getSeries().get(0).getData().get(i).getY());
 
+		int i = 0;
+		int gc_time_i = 0;
+
+		while (rs.next()) {
+			// 根据garbage_collector_id 纬度,可能存在多条线,且garbage_collector_id 不确定
+			if (rs.getDouble(1) != 0 ) {
+				Assert.assertEquals(String.valueOf(rs.getDouble(1)),
+						b.getSeries().get(0).getData().get(gc_time_i).getY());
+				gc_time_i++;
+			}
 			i++;
 		}
-		if (i==0){
-			Assert.fail("数据库中未查到数据"+sql);
+		if (i == 0) {
+			Assert.fail("数据库中未查到数据" + sql);
 		}
 	}
 }

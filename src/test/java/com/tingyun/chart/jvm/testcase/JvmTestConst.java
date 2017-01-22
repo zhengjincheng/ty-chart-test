@@ -6,5 +6,8 @@ public class JvmTestConst {
 	public static final String vm_id = "402";
 	public static final String context_path_id = "2123";
 	public static final String thread_pool_id = "842";
+	public static final String instanceId = "2880";
+
+	
 
 }
