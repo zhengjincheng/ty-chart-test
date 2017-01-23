@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
@@ -33,6 +35,16 @@ import com.tingyun.chart.testcase.ChartTestInput;
 import com.tingyun.page.impl.LoginPage;
 
 public class HttpUtil {
+	public static void main(String[] args){
+		String content="function()}}},12312";
+		
+		String x=replace(content,"function(.*?),", "\"replaceby zjc\"},");
+		System.out.println(x);
+	}
+	public static String replace(String src,CharSequence target, CharSequence replacement) {
+        return Pattern.compile(target.toString(), Pattern.DOTALL).matcher(
+                src).replaceAll(Matcher.quoteReplacement(replacement.toString()));
+    }
 	private static HttpUtil instance;
 
 	public static HttpUtil getInstance() {
@@ -101,9 +113,17 @@ public class HttpUtil {
 				System.out.println("StatusCode=" + response.getStatusLine().getStatusCode());
 				String content = EntityUtils.toString(entity, "ISO-8859-1");
 				System.out.println(content);
-				ChartBean b = JsonUtil.get(content, ChartBean.class);
+				ChartBean b=null;
+				try {
+					 b = JsonUtil.get(content, ChartBean.class);
+				}catch (IOException e){
+					 String x=replace(content,"function(.*?),", "\"replaceby zjc\"},");
+					 b = JsonUtil.get(x, ChartBean.class);
+				}
 				System.out.println(b);
+
 				return b;
+				
 			}
 		} catch (Exception e) {
 			System.out.println("--getCharBean--" + e.getMessage());

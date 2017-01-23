@@ -83,7 +83,7 @@ public class ApplicationWebactionTopnTest extends TingyunChartTestCase {
 			//最大值
 			Assert.assertEquals(String.valueOf(rs.getBigDecimal(4)), b.getSeries().get(0).getData().get(i).getTooltipObject().getData().get(3).getValue());
 			//最小值
-			Assert.assertEquals(String.valueOf(rs.getDouble(5)), b.getSeries().get(0).getData().get(i).getTooltipObject().getData().get(4).getValue());
+			Assert.assertEquals(String.valueOf(rs.getBigDecimal(5)), b.getSeries().get(0).getData().get(i).getTooltipObject().getData().get(4).getValue());
 			//todo 平方差
 			//Assert.assertEquals(String.valueOf(rs.getBigDecimal(6)), b.getSeries().get(0).getData().get(i).getTooltipObject().getData().get(5).getValue());
 
