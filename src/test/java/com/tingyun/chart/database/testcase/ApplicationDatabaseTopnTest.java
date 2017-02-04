@@ -86,8 +86,6 @@ public class ApplicationDatabaseTopnTest extends TingyunChartTestCase {
 			//最大值 最小值因为以时间UNIT_MESSAGE_SECOND 为单位在tooptip 被格式成 DecimalFormat df = new DecimalFormat("0.000"); 所以设置精度后不再转为 .floatValue()
 			Assert.assertEquals(String.valueOf(rs.getBigDecimal(3).setScale(3,BigDecimal.ROUND_DOWN)), s.getData().get(i).getTooltipObject().getData().get(2).getValue());
 			Assert.assertEquals(String.valueOf(rs.getBigDecimal(4).setScale(3,BigDecimal.ROUND_DOWN)), s.getData().get(i).getTooltipObject().getData().get(3).getValue());
-			//标准差todo
-			//Assert.assertEquals(String.valueOf(rs.getBigDecimal(6).setScale(3,BigDecimal.ROUND_HALF_UP).doubleValue()),b.getSeries().get(1).getData().get(i).getTooltipObject().getData().get(4).getValue());
 			//调用次数
 			Assert.assertEquals(String.valueOf(rs.getInt(5)), s.getData().get(i).getTooltipObject().getData().get(4).getValue());
 			i++;
